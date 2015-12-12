@@ -93,7 +93,7 @@ function create() {
 
 	makeTerrain();
 
-	player = game.add.sprite(0, 400, 'star');
+	player = game.add.sprite(0, 0, 'star');
 	heavy = game.add.sprite(200, 200, 'diamond');
 
 	game.physics.arcade.enable(player);
