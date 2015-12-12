@@ -2,6 +2,7 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create
 var player;
 var cursors;
 var heavy;
+var islandGroup;
 
 var tileSize = 128;
 var stepSize = tileSize / 4;
@@ -65,7 +66,7 @@ function makeTerrain() {
 		if (frame == 4) {
 			frame = 7;
 		}
-		var tile = game.add.sprite(x, Math.min(left, right), 'terrain');
+		var tile = islandGroup.create(x, Math.min(left, right), 'terrain');
 		tile.frame = frame;
 		if (flip) {
 			tile.scale.x = -1;
@@ -84,6 +85,9 @@ function create() {
 	game.physics.startSystem(Phaser.Physics.ARCADE);
 
 	game.stage.backgroundColor = 'rgb(0,0,255)';
+	
+	islandGroup = game.add.group();
+	islandGroup.enableBody = true;
 
 	makeTerrain();
 
@@ -97,7 +101,6 @@ function create() {
 	cursors = game.input.keyboard.createCursorKeys();
 	
 	game.camera.follow(player);
-
 }
 
 function update() {
@@ -109,6 +112,8 @@ function update() {
 		player.body.velocity.add(offset.x, offset.y);
 		player.body.velocity.multiply(1 - airResistance, 1 - airResistance);
 	}
+
+	game.physics.arcade.collide(player, islandGroup);
 }
 
 function render() {
