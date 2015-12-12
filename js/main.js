@@ -1,9 +1,28 @@
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render });
 var player;
 var cursors;
 var heavy;
 
+var lines = [];
+
 var spaceMode = false;
+
+function makeTerrain() {
+	var iterations = 10;
+	var seaLevel = game.height - (game.height / 4);
+
+	var segments = [0, 1, 0];
+
+
+	var width = game.width / (segments.length - 1);
+
+	for (var i = 0; i < segments.length - 1; ++i) {
+		var x = i * width;
+		var left = (1 - segments[i]) * seaLevel;
+		var right = (1 - segments[i + 1]) * seaLevel;
+		lines.push(new Phaser.Line(x, left, x + width, right));
+	}
+}
 
 function preload() {
 	game.load.image('star', 'assets/star.png');
@@ -25,6 +44,8 @@ function create() {
 	}
 
 	cursors = game.input.keyboard.createCursorKeys();
+
+	makeTerrain();
 }
 
 function update() {
@@ -56,4 +77,10 @@ function update() {
 			player.body.velocity.multiply(1 - airResistance, 1 - airResistance);
 		}
 	}
+}
+
+function render() {
+	lines.forEach(function(l) {
+		game.debug.geom(l);
+	});
 }
