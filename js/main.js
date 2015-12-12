@@ -3,7 +3,7 @@ var player;
 var cursors;
 var heavy;
 
-var spaceMode = true;
+var spaceMode = false;
 
 function preload() {
 	game.load.image('star', 'assets/star.png');
@@ -19,6 +19,9 @@ function create() {
 	game.physics.arcade.enable(player);
 	if (spaceMode) {
 		player.body.velocity.x = 60;
+	} else {
+		player.body.gravity.y = 600;
+		player.body.collideWorldBounds = true;
 	}
 
 	cursors = game.input.keyboard.createCursorKeys();
@@ -43,5 +46,14 @@ function update() {
 		var grav = gravDir.setMagnitude(gravPower / distSq);
 
 		player.body.velocity = player.body.velocity.add(grav.x, grav.y);
+	} else {
+		var lineStrength = 0.1;
+		var airResistance = 0.01;
+		if (game.input.activePointer.isDown) {
+			var offset = heavy.position.clone().subtract(player.body.position.x, player.body.position.y);
+			offset.multiply(lineStrength, lineStrength);
+			player.body.velocity.add(offset.x, offset.y);
+			player.body.velocity.multiply(1 - airResistance, 1 - airResistance);
+		}
 	}
 }
