@@ -3,6 +3,7 @@ var player;
 var cursors;
 var heavy;
 var islandGroup;
+var anchor;
 
 var tileSize = 128;
 var stepSize = tileSize / 4;
@@ -108,18 +109,43 @@ function update() {
 	// we need to collide first, and THEN give the velocity a kick away from the collision site
 	game.physics.arcade.collide(player, islandGroup);
 
+	if (game.input.activePointer.isDown) {
+		// check whether we've already got an anchor point
+		if (anchor) {
+			grapple();
+		} else {
+			var ray = new Phaser.Line(player.body.position.x, player.body.position.y, game.input.activePointer.worldX, game.input.activePointer.worldY);
+			var tree = new Phaser.Line(heavy.position.x, heavy.position.y, heavy.position.x, game.height);
+			
+			var p = ray.intersects(tree, true);
+			if (p) {
+				anchor = p;
+				console.log
+				console.log(anchor);
+				grapple();
+			}
+		}
+	} else {
+		anchor = null;
+	}
+}
+
+function grapple() {
 	var lineStrength = 0.1;
 	var airResistance = 0.01;
-	if (game.input.activePointer.isDown) {
-		var offset = heavy.position.clone().subtract(player.body.position.x, player.body.position.y);
-		offset.multiply(lineStrength, lineStrength);
-		player.body.velocity.add(offset.x, offset.y);
-		player.body.velocity.multiply(1 - airResistance, 1 - airResistance);
-	}
+
+	var offset = anchor.clone().subtract(player.body.position.x, player.body.position.y);
+	offset.multiply(lineStrength, lineStrength);
+	player.body.velocity.add(offset.x, offset.y);
+	player.body.velocity.multiply(1 - airResistance, 1 - airResistance);
 }
 
 function render() {
 	lines.forEach(function(l) {
 		game.debug.geom(l);
 	});
+
+	if (anchor) {
+		game.debug.geom(new Phaser.Line(player.body.x, player.body.y, anchor.x, anchor.y));
+	}
 }
