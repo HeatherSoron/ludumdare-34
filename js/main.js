@@ -3,6 +3,13 @@ var player;
 var cursors;
 var heavy;
 
+var tileSize = 64;
+var islandTiles = 100;
+var seaTiles = 10;
+
+var islandWidth = islandTiles * tileSize;
+var seaWidth = seaTiles * tileSize;
+
 var lines = [];
 
 function makeTerrain() {
@@ -26,7 +33,7 @@ function makeTerrain() {
 	}
 
 
-	var width = game.width / (segments.length - 1);
+	var width = islandWidth / (segments.length - 1);
 
 	for (var i = 0; i < segments.length - 1; ++i) {
 		var x = i * width;
@@ -42,6 +49,7 @@ function preload() {
 }
 
 function create() {
+	game.world.setBounds(-seaWidth, 0, islandWidth + 2 * seaWidth, 600);
 	game.physics.startSystem(Phaser.Physics.ARCADE);
 
 	player = game.add.sprite(0, 400, 'star');
@@ -52,6 +60,8 @@ function create() {
 	player.body.collideWorldBounds = true;
 
 	cursors = game.input.keyboard.createCursorKeys();
+	
+	game.camera.follow(player);
 
 	makeTerrain();
 }
