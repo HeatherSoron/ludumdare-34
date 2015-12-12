@@ -3,9 +3,13 @@ var player;
 var cursors;
 var heavy;
 
-var tileSize = 64;
-var islandTiles = 100;
+var tileSize = 128;
+var stepSize = tileSize / 4;
+
 var seaTiles = 10;
+
+var terrainIterations = 4;
+var islandTiles = Math.pow(2, terrainIterations + 1);
 
 var islandWidth = islandTiles * tileSize;
 var seaWidth = seaTiles * tileSize;
@@ -13,13 +17,12 @@ var seaWidth = seaTiles * tileSize;
 var lines = [];
 
 function makeTerrain() {
-	var iterations = 10;
 	var seaLevel = game.height - (game.height / 4);
 
 	// array of segment heights
 	var segments = [0, 1, 0];
 
-	for (var i = 0; i < iterations; ++i) {
+	for (var i = 0; i < terrainIterations; ++i) {
 		// increment by 2 each time, because we add another element each iteration
 		// also, skip the last iteration, because otherwise j+1 is undefined
 		for (var j = 0; j < segments.length - 1; j += 2) {
@@ -35,22 +38,54 @@ function makeTerrain() {
 
 	var width = islandWidth / (segments.length - 1);
 
+	segments = segments.map(function(elev) {
+		var height = (1 - elev) * seaLevel;
+		// round it to the step size of our tiles
+		height = Math.round(height / stepSize) * stepSize;
+		return height;
+	});
+
 	for (var i = 0; i < segments.length - 1; ++i) {
 		var x = i * width;
-		var left = (1 - segments[i]) * seaLevel;
-		var right = (1 - segments[i + 1]) * seaLevel;
+		var left = segments[i];
+		var right = segments[i + 1];
 		lines.push(new Phaser.Line(x, left, x + width, right));
+		
+		// do left - right because negative numbers are UP
+		var steps = (left - right) / stepSize;
+		var flip = false;
+		if (steps < 0) {
+			console.log(left, right, steps, 4 - (-steps));
+			flip = true;
+			steps = -steps;
+			// compensate for the flip
+			x += tileSize;
+		}
+		var frame = 4 - steps;
+		if (frame == 4) {
+			frame = 7;
+		}
+		var tile = game.add.sprite(x, Math.min(left, right), 'terrain');
+		tile.frame = frame;
+		if (flip) {
+			tile.scale.x = -1;
+		}
 	}
 }
 
 function preload() {
 	game.load.image('star', 'assets/star.png');
 	game.load.image('diamond', 'assets/diamond.png');
+	game.load.spritesheet('terrain', 'assets/terrain.png', tileSize, tileSize);
 }
 
 function create() {
 	game.world.setBounds(-seaWidth, 0, islandWidth + 2 * seaWidth, 600);
 	game.physics.startSystem(Phaser.Physics.ARCADE);
+
+	game.stage.backgroundColor = 'rgb(0,0,255)';
+
+	makeTerrain();
 
 	player = game.add.sprite(0, 400, 'star');
 	heavy = game.add.sprite(200, 200, 'diamond');
@@ -63,7 +98,6 @@ function create() {
 	
 	game.camera.follow(player);
 
-	makeTerrain();
 }
 
 function update() {
