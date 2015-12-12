@@ -67,6 +67,7 @@ function makeTerrain() {
 			frame = 7;
 		}
 		var tile = islandGroup.create(x, Math.min(left, right), 'terrain');
+		tile.body.immovable = true;
 		tile.frame = frame;
 		if (flip) {
 			tile.scale.x = -1;
@@ -104,6 +105,9 @@ function create() {
 }
 
 function update() {
+	// we need to collide first, and THEN give the velocity a kick away from the collision site
+	game.physics.arcade.collide(player, islandGroup);
+
 	var lineStrength = 0.1;
 	var airResistance = 0.01;
 	if (game.input.activePointer.isDown) {
@@ -112,8 +116,6 @@ function update() {
 		player.body.velocity.add(offset.x, offset.y);
 		player.body.velocity.multiply(1 - airResistance, 1 - airResistance);
 	}
-
-	game.physics.arcade.collide(player, islandGroup);
 }
 
 function render() {
