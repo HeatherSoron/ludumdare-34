@@ -17,6 +17,8 @@ var islandTiles;
 var islandWidth;
 var seaWidth = seaTiles * tileSize;
 
+var seaLevel = game.height - (game.height / 4);
+
 var worldHeight = 1200;
 
 var lines = [];
@@ -37,11 +39,16 @@ var terrainFrames = {
 
 var terrainVariations = 4;
 
+var maxPlayerDistance = 0;
+// 1 in n chance for a bush
+var bushInvChance = 24;
+var bushVariations = 24;
 
 function preload() {
 	game.load.image('star', 'assets/star.png');
 	game.load.image('diamond', 'assets/diamond.png');
 	game.load.spritesheet('tree', 'assets/tree.png', 128, 128);
+	game.load.spritesheet('bush', 'assets/bush.png', 16, 16);
 	game.load.spritesheet('terrain', 'assets/terrain.png', tileSize, tileSize);
 }
 
@@ -139,6 +146,25 @@ function update() {
 	} else {
 		anchor = null;
 	}
+
+	if (player.x > maxPlayerDistance) {
+		for (var x = maxPlayerDistance; x < player.x; ++x) {
+			if (Math.random() * bushInvChance < 1) {
+				spawnBush(x);
+			}
+		}
+		maxPlayerDistance = player.x;
+	}
+}
+
+function spawnBush(x) {
+	var bush = game.add.sprite(x, seaLevel, 'bush');
+	var variation = Math.floor(Math.random() * bushVariations);
+	bush.frame = variation;
+
+	var rotation = Math.floor(Math.random() * 4) * 90;
+	bush.anchor.setTo(0.5, 0.5);
+	bush.angle = rotation;
 }
 
 function grapple() {

@@ -1,6 +1,4 @@
 function makeTerrain() {
-	var seaLevel = game.height - (game.height / 4);
-
 	// array of segment heights
 	var segments = [0, 0.6, 0, 0.6, 0];
 
