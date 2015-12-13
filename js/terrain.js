@@ -44,7 +44,22 @@ function makeTerrain() {
 			// compensate for the flip
 			x += tileSize;
 		}
-		var frame = 4 - steps;
+	
+		var frameName;
+		switch (steps) {
+			case 0:
+				frameName = 'full';
+				break;
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+				frameName = 'slope' + steps;
+				break;
+		}
+		var randVariation = Math.floor(Math.random() * terrainVariations);
+		var frame = terrainFrames[frameName][randVariation];
+
 		var tile = islandGroup.create(x, Math.min(left, right), 'terrain');
 		tile.body.immovable = true;
 		tile.frame = frame;

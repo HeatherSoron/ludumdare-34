@@ -27,6 +27,17 @@ var treeHeight = 300;
 
 var horizontalDrag = 500;
 
+var terrainFrames = {
+	slope1: [3, 7, 19, 23],
+	slope2: [2, 6, 18, 22],
+	slope3: [1, 5, 17, 21],
+	slope4: [0, 4, 16, 20],
+	full: [8, 12, 24, 28],
+};
+
+var terrainVariations = 4;
+
+
 function preload() {
 	game.load.image('star', 'assets/star.png');
 	game.load.image('diamond', 'assets/diamond.png');
