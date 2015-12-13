@@ -2,7 +2,7 @@ function makeTerrain() {
 	var seaLevel = game.height - (game.height / 4);
 
 	// array of segment heights
-	var segments = [0, 1, 0];
+	var segments = [0, 0.6, 0, 0.6, 0];
 
 	for (var i = 0; i < terrainIterations; ++i) {
 		// increment by 2 each time, because we add another element each iteration
@@ -17,6 +17,8 @@ function makeTerrain() {
 		}
 	}
 
+	islandTiles = segments.length - 1;
+	islandWidth = islandTiles * tileSize;
 
 	var width = islandWidth / (segments.length - 1);
 

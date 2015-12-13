@@ -1,4 +1,4 @@
-var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', { preload: preload, create: create, update: update, render: render });
+var game = new Phaser.Game(1200, 600, Phaser.AUTO, 'game', { preload: preload, create: create, update: update, render: render });
 var player;
 var cursors;
 var trees;
@@ -12,19 +12,20 @@ var stepSize = tileSize / 4;
 var seaTiles = 10;
 
 var terrainIterations = 6;
-var islandTiles = Math.pow(2, terrainIterations + 1);
+var islandTiles;
 
-var islandWidth = islandTiles * tileSize;
+var islandWidth;
 var seaWidth = seaTiles * tileSize;
 
 var worldHeight = 1200;
 
 var lines = [];
 
-var gravity = 600;
+var gravity = 300;
 
 var treeHeight = 300;
 
+var horizontalDrag = 500;
 
 var terrainFrames = {
 	slope1: [3, 7, 19, 23],
@@ -33,7 +34,9 @@ var terrainFrames = {
 	slope4: [0, 4, 16, 20],
 	full: [8, 12, 24, 28],
 };
+
 var terrainVariations = 4;
+
 
 function preload() {
 	game.load.image('star', 'assets/star.png');
@@ -56,8 +59,6 @@ function create() {
 	makeTerrain();
 
 	player = game.add.sprite(0, 0, 'star');
-	makeTree(200, 200);
-	makeTree(400, 200);
 
 	game.physics.arcade.enable(player);
 	player.body.gravity.y = gravity;
@@ -112,7 +113,12 @@ function update() {
 	}
 
 	// we need to collide first, and THEN give the velocity a kick away from the collision site
-	game.physics.arcade.collide(player, islandGroup);
+	if (game.physics.arcade.collide(player, islandGroup)) {
+		player.body.drag.x = horizontalDrag;
+	} else {
+		player.body.drag.x = 0;
+	}
+	
 
 	if (game.input.activePointer.isDown) {
 		// check whether we've already got an anchor point
@@ -137,7 +143,7 @@ function update() {
 
 function grapple() {
 	var lineStrength = 0.1;
-	var airResistance = 0.01;
+	var airResistance = 0.005;
 
 	var offset = anchor.clone().subtract(player.body.position.x, player.body.position.y);
 	offset.multiply(lineStrength, lineStrength);
