@@ -85,8 +85,8 @@ function throwSeed() {
 	game.physics.arcade.enable(seed);
 	seed.body.gravity.y = gravity;
 
-	seed.body.velocity = new Phaser.Point(game.input.activePointer.worldX, game.input.activePointer.worldY).subtract(player.body.position.x, player.body.position.y).setMagnitude(throwStrength);
-
+	seed.body.velocity = new Phaser.Point(game.input.activePointer.worldX, game.input.activePointer.worldY).subtract(player.body.position.x, player.body.position.y)
+		.setMagnitude(throwStrength).add(player.body.velocity.x, player.body.velocity.y);
 	seeds.push(seed);
 }
 
