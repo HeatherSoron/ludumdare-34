@@ -39,8 +39,6 @@ function makeTerrain() {
 		if (steps < 0) {
 			flip = true;
 			steps = -steps;
-			// compensate for the flip
-			x += tileSize;
 		}
 	
 		var frameName;
@@ -58,11 +56,19 @@ function makeTerrain() {
 		var randVariation = Math.floor(Math.random() * terrainVariations);
 		var frame = terrainFrames[frameName][randVariation];
 
-		var tile = islandGroup.create(x, Math.min(left, right), 'terrain');
+		var tileHeight = Math.min(left, right);
+		var tile = islandGroup.create(x + (flip ? tileSize : 0), tileHeight, 'terrain');
 		tile.body.immovable = true;
 		tile.frame = frame;
 		if (flip) {
 			tile.scale.x = -1;
+		}
+
+		while (tileHeight < game.height) {
+			tileHeight += tileSize;
+			randVariation = Math.floor(Math.random() * terrainVariations);
+			// don't need physics on these (hopefully), so don't add them in the islandGroup
+			game.add.sprite(x, tileHeight, 'terrain').frame = terrainFrames['full'][randVariation];
 		}
 	}
 }
