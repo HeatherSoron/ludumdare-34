@@ -5,12 +5,12 @@ var heavy;
 var islandGroup;
 var anchor;
 
-var tileSize = 128;
+var tileSize = 32;
 var stepSize = tileSize / 4;
 
 var seaTiles = 10;
 
-var terrainIterations = 4;
+var terrainIterations = 6;
 var islandTiles = Math.pow(2, terrainIterations + 1);
 
 var islandWidth = islandTiles * tileSize;

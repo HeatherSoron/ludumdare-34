@@ -44,9 +44,6 @@ function makeTerrain() {
 			x += tileSize;
 		}
 		var frame = 4 - steps;
-		if (frame == 4) {
-			frame = 7;
-		}
 		var tile = islandGroup.create(x, Math.min(left, right), 'terrain');
 		tile.body.immovable = true;
 		tile.frame = frame;
