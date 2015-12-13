@@ -1,7 +1,7 @@
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render });
 var player;
 var cursors;
-var heavy;
+var trees;
 var islandGroup;
 var anchor;
 
@@ -26,6 +26,8 @@ function preload() {
 }
 
 function create() {
+	trees = [];
+
 	game.world.setBounds(-seaWidth, 0, islandWidth + 2 * seaWidth, 600);
 	game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -37,7 +39,7 @@ function create() {
 	makeTerrain();
 
 	player = game.add.sprite(0, 0, 'star');
-	heavy = game.add.sprite(200, 200, 'diamond');
+	makeTree(200, 200);
 
 	game.physics.arcade.enable(player);
 	player.body.gravity.y = 600;
@@ -46,6 +48,14 @@ function create() {
 	cursors = game.input.keyboard.createCursorKeys();
 	
 	game.camera.follow(player);
+}
+
+function makeTree(x, y) {
+	var tree = game.add.sprite(x, y, 'diamond');
+	var center = tree.x + tree.width / 2;
+	tree.trunk = new Phaser.Line(center, tree.y, center, game.height);
+	trees.push(tree);
+
 }
 
 function update() {
@@ -58,7 +68,7 @@ function update() {
 			grapple();
 		} else {
 			var ray = new Phaser.Line(player.body.position.x, player.body.position.y, game.input.activePointer.worldX, game.input.activePointer.worldY);
-			var tree = new Phaser.Line(heavy.position.x, heavy.position.y, heavy.position.x, game.height);
+			var tree = trees[0].trunk;
 			
 			var p = ray.intersects(tree, true);
 			if (p) {
@@ -86,6 +96,10 @@ function grapple() {
 function render() {
 	lines.forEach(function(l) {
 		game.debug.geom(l);
+	});
+
+	trees.forEach(function(t) {
+		game.debug.geom(t.trunk);
 	});
 
 	if (anchor) {
