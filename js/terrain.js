@@ -1,3 +1,5 @@
+var heights = [];
+
 function makeTerrain() {
 	// array of segment heights
 	var segments = [0, 0.6, 0, 0.6, 0];
@@ -65,6 +67,8 @@ function makeTerrain() {
 			tile.scale.x = -1;
 		}
 
+		heights.push(left);
+
 		while (tileHeight < game.height) {
 			tileHeight += tileSize;
 			randVariation = Math.floor(Math.random() * terrainVariations);
@@ -72,4 +76,18 @@ function makeTerrain() {
 			game.add.sprite(x, tileHeight, 'terrain').frame = terrainFrames['full'][randVariation];
 		}
 	}
+	// need to push ONE more entry onto heights, for the end. Luckily, it's the same height as the start.
+	heights.push(segments[0]);
+}
+
+function heightAt(x) {
+	// split x into tile (integer), and sub-tile position
+	var temp = x / tileSize;
+	var tile = Math.floor(temp);
+	var subTile = temp - tile;
+
+	var tileHeight = heights[tile];
+	var diff = heights[tile + 1] - tileHeight;
+
+	return tileHeight + diff * subTile;
 }

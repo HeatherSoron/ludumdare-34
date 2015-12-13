@@ -159,7 +159,7 @@ function update() {
 }
 
 function spawnBush(x) {
-	var bush = game.add.sprite(x, seaLevel, 'bush');
+	var bush = game.add.sprite(x, heightAt(x), 'bush');
 	var variation = Math.floor(Math.random() * bushVariations);
 	bush.frame = variation;
 
