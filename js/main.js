@@ -1,7 +1,8 @@
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render });
+var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', { preload: preload, create: create, update: update, render: render });
 var player;
 var cursors;
 var trees;
+var seeds = [];
 var islandGroup;
 var anchor;
 
@@ -18,6 +19,9 @@ var seaWidth = seaTiles * tileSize;
 
 var lines = [];
 
+var gravity = 600;
+
+var treeHeight = 300;
 
 function preload() {
 	game.load.image('star', 'assets/star.png');
@@ -43,11 +47,22 @@ function create() {
 	makeTree(400, 200);
 
 	game.physics.arcade.enable(player);
-	player.body.gravity.y = 600;
+	player.body.gravity.y = gravity;
 	player.body.collideWorldBounds = true;
 
 	cursors = game.input.keyboard.createCursorKeys();
 	
+	game.input.mouse.mouseDownCallback = function(e) {
+		if (e.button === Phaser.Mouse.RIGHT_BUTTON) {
+			throwSeed();
+		} else {
+			console.log(game.input.mouse.button);
+		}
+	}
+	document.getElementById('game').addEventListener('contextmenu', function(e) {
+		e.preventDefault();
+	});
+
 	game.camera.follow(player);
 }
 
@@ -59,7 +74,29 @@ function makeTree(x, y) {
 
 }
 
+function throwSeed() {
+	var throwStrength = 500;
+
+	var seed = game.add.sprite(player.body.x, player.body.y, 'star');
+	game.physics.arcade.enable(seed);
+	seed.body.gravity.y = gravity;
+
+	seed.body.velocity = new Phaser.Point(game.input.activePointer.worldX, game.input.activePointer.worldY).subtract(player.body.position.x, player.body.position.y).setMagnitude(throwStrength);
+
+	seeds.push(seed);
+}
+
 function update() {
+	// iterate backwards because we'll be removing elements
+	for (var i = seeds.length - 1; i >= 0; --i) {
+		if (game.physics.arcade.overlap(seeds[i], islandGroup)) {
+			var seed = seeds[i];
+			makeTree(seed.body.position.x, seed.body.position.y - treeHeight);
+			seed.destroy();
+			seeds.splice(i, 1);
+		}
+	}
+
 	// we need to collide first, and THEN give the velocity a kick away from the collision site
 	game.physics.arcade.collide(player, islandGroup);
 
