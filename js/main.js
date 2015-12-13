@@ -28,6 +28,7 @@ var treeHeight = 300;
 function preload() {
 	game.load.image('star', 'assets/star.png');
 	game.load.image('diamond', 'assets/diamond.png');
+	game.load.spritesheet('tree', 'assets/tree.png', 128, 128);
 	game.load.spritesheet('terrain', 'assets/terrain.png', tileSize, tileSize);
 }
 
@@ -69,7 +70,8 @@ function create() {
 }
 
 function makeTree(x, y) {
-	var tree = game.add.sprite(x, y, 'diamond');
+	var tree = game.add.sprite(x, y, 'tree');
+	tree.frame = 7;
 	var center = tree.x + tree.width / 2;
 	tree.trunk = new Phaser.Line(center, tree.y, center, game.height);
 	trees.push(tree);
@@ -79,7 +81,7 @@ function makeTree(x, y) {
 function throwSeed() {
 	var throwStrength = 500;
 
-	var seed = game.add.sprite(player.body.x, player.body.y, 'star');
+	var seed = game.add.sprite(player.body.x, player.body.y, 'diamond');
 	game.physics.arcade.enable(seed);
 	seed.body.gravity.y = gravity;
 
