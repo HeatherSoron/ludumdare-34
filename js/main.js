@@ -40,6 +40,7 @@ function create() {
 
 	player = game.add.sprite(0, 0, 'star');
 	makeTree(200, 200);
+	makeTree(400, 200);
 
 	game.physics.arcade.enable(player);
 	player.body.gravity.y = 600;
@@ -68,13 +69,13 @@ function update() {
 			grapple();
 		} else {
 			var ray = new Phaser.Line(player.body.position.x, player.body.position.y, game.input.activePointer.worldX, game.input.activePointer.worldY);
-			var tree = trees[0].trunk;
-			
-			var p = ray.intersects(tree, true);
-			if (p) {
-				anchor = p;
-				console.log
-				console.log(anchor);
+			trees.forEach(function(tree) {
+				var p = ray.intersects(tree.trunk, true);
+				if (p && (!anchor || p.distance(player.body.position) < anchor.distance(player.body.position))) {
+					anchor = p;
+				}
+			});
+			if (anchor) {
 				grapple();
 			}
 		}

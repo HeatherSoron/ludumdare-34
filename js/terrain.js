@@ -37,7 +37,6 @@ function makeTerrain() {
 		var steps = (left - right) / stepSize;
 		var flip = false;
 		if (steps < 0) {
-			console.log(left, right, steps, 4 - (-steps));
 			flip = true;
 			steps = -steps;
 			// compensate for the flip
