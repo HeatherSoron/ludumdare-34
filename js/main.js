@@ -25,8 +25,6 @@ var lines = [];
 
 var gravity = 300;
 
-var treeHeight = 300;
-
 var horizontalDrag = 500;
 
 var terrainFrames = {
@@ -44,10 +42,12 @@ var maxPlayerDistance = 0;
 var bushInvChance = 24;
 var bushVariations = 24;
 
+var treeHeight = 530;
+
 function preload() {
 	game.load.image('star', 'assets/star.png');
 	game.load.image('diamond', 'assets/diamond.png');
-	game.load.spritesheet('tree', 'assets/tree.png', 128, 128);
+	game.load.spritesheet('tree', 'assets/tree.png', 72, 544);
 	game.load.spritesheet('bush', 'assets/bush.png', 16, 16);
 	game.load.spritesheet('terrain', 'assets/terrain.png', tileSize, tileSize);
 }
@@ -89,7 +89,8 @@ function create() {
 
 function makeTree(x, y) {
 	var tree = game.add.sprite(x, y, 'tree');
-	tree.frame = 7;
+	tree.animations.add('grow', [0, 1, 2, 3, 4, 5, 6], 4, false);
+	tree.animations.play('grow');
 	var center = tree.x + tree.width / 2;
 	tree.trunk = new Phaser.Line(center, tree.y, center, game.height);
 	trees.push(tree);
@@ -125,7 +126,7 @@ function update() {
 	} else {
 		player.body.drag.x = 0;
 	}
-	
+
 
 	if (game.input.activePointer.isDown) {
 		// check whether we've already got an anchor point
