@@ -17,6 +17,8 @@ var islandTiles = Math.pow(2, terrainIterations + 1);
 var islandWidth = islandTiles * tileSize;
 var seaWidth = seaTiles * tileSize;
 
+var worldHeight = 1200;
+
 var lines = [];
 
 var gravity = 600;
@@ -32,7 +34,7 @@ function preload() {
 function create() {
 	trees = [];
 
-	game.world.setBounds(-seaWidth, 0, islandWidth + 2 * seaWidth, 600);
+	game.world.setBounds(-seaWidth, game.height - worldHeight, islandWidth + 2 * seaWidth, worldHeight);
 	game.physics.startSystem(Phaser.Physics.ARCADE);
 
 	game.stage.backgroundColor = 'rgb(0,0,255)';
