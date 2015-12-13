@@ -57,7 +57,8 @@ function makeTerrain() {
 		var frame = terrainFrames[frameName][randVariation];
 
 		var tileHeight = Math.min(left, right);
-		var tile = islandGroup.create(x + (flip ? tileSize : 0), tileHeight, 'terrain');
+		var tile = islandGroup.create(x + tileSize / 2, tileHeight + tileSize / 2, 'terrain');
+		tile.anchor.setTo(0.5, 0.5);
 		tile.body.immovable = true;
 		tile.frame = frame;
 		if (flip) {
