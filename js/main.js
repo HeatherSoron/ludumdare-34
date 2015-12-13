@@ -108,7 +108,7 @@ function update() {
 			var ray = new Phaser.Line(player.body.position.x, player.body.position.y, game.input.activePointer.worldX, game.input.activePointer.worldY);
 			trees.forEach(function(tree) {
 				var p = ray.intersects(tree.trunk, true);
-				if (p && (!anchor || p.distance(player.body.position) < anchor.distance(player.body.position))) {
+				if (p && (!anchor || p.distance(getMouseWorldPos()) < anchor.distance(getMouseWorldPos()))) {
 					anchor = p;
 				}
 			});
