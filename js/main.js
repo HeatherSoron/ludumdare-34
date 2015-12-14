@@ -50,7 +50,7 @@ var treeHeight = 530;
 var treeWidth = 72;
 
 function preload() {
-	game.load.image('diamond', 'assets/diamond.png');
+	game.load.image('seed', 'assets/seed.png');
 	game.load.spritesheet('player', 'assets/player.png', 32, 32);
 	game.load.spritesheet('tree', 'assets/tree.png', treeWidth, 544);
 	game.load.spritesheet('tree2', 'assets/tree2.png', treeWidth, 544);
@@ -74,7 +74,7 @@ function create() {
 	player = game.add.sprite(0, 0, 'player');
 	player.anchor.setTo(0.5, 0.5);
 	player.scale.x = -1;
-	player.animations.add('spin', [0,1,2,3,4,5,6,7], 20, true);
+	player.animations.add('spin', [0,1,2,3,4,5,6,7], 10, true);
 
 	game.physics.arcade.enable(player);
 	player.body.gravity.y = gravity;
@@ -117,7 +117,7 @@ function makeTree(x, y) {
 function throwSeed() {
 	var throwStrength = 500;
 
-	var seed = game.add.sprite(player.body.x, player.body.y, 'diamond');
+	var seed = game.add.sprite(player.body.x, player.body.y, 'seed');
 	game.physics.arcade.enable(seed);
 	seed.body.gravity.y = gravity;
 
