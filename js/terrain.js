@@ -25,7 +25,16 @@ function makeTerrain() {
 	var segments = [0, 0.6, -0.2, 1, 0.5, 0];
 	
 	// note that by having iterateTerrain as a function, we can do several passes. e.g., several separate islands
-	iterateTerrain(segments, terrainIterations);
+	iterateTerrain(segments, terrainIterations - 2);
+
+	// put a few cliffs in
+	for (var i = 1; i < segments.length - 2; ++i) {
+		if (Math.random() * segments.length < 8) {
+			segments[i] += Math.random() - 0.5;
+		}
+	}
+
+	iterateTerrain(segments, 2);
 
 
 	islandTiles = segments.length - 1;
