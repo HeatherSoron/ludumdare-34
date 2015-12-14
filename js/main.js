@@ -11,8 +11,11 @@ var stepSize = tileSize / 4;
 
 var seaTiles = 10;
 
-var terrainIterations = 7;
+var terrainIterations = 5;
 var islandTiles;
+
+//debugging for james
+displayArray = [];
 
 var islandWidth;
 var seaWidth = seaTiles * tileSize;

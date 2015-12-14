@@ -21,10 +21,16 @@ function iterateTerrain(segments, iterations) {
 }
 
 function makeTerrain() {
-	// array of segment heights
-	var segments = [0, 0.6, -0.2, 1, 0.5, 0];
+	var initialSegmentNumber = 10;
+	//var segments = [0, 0.8, 0.2, 0.6, 0.1, 0.9, 0.3, 0.5, 0, 0.9, 0.3, 0.5, 0, 0.9, 0.3, 0.5, 0, 0.9, 0.3, 0.5, 0, 0.9, 0.3, 0.5, 0];
+	var segments = [];
+	for (var i = 0; i < initialSegmentNumber; i++) {
+		if (i === 0 || i === initialSegmentNumber - 1) {segments.push(0);}
+		else if (i%2 === 0) {segments.push(Math.random()*0.5+0.5);}
+		else {segments.push(Math.random()*0.5);}
+	}
+	console.log(segments);
 	
-	// note that by having iterateTerrain as a function, we can do several passes. e.g., several separate islands
 	iterateTerrain(segments, terrainIterations - 2);
 
 	// put a few cliffs in
@@ -35,7 +41,6 @@ function makeTerrain() {
 	}
 
 	iterateTerrain(segments, 2);
-
 
 	islandTiles = segments.length - 1;
 	islandWidth = islandTiles * tileSize;
