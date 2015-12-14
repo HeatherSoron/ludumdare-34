@@ -10,7 +10,7 @@ You've drifted down to a new, barren island, and wish to spread shrubbery and tr
 
 Right-click (or any key) to throw seeds, which grow trees.
 
-Left-click to swing on trees.
+Left-click to swing on trees. Note: click just _past_ the target.
 
 The distance you throw seeds depends on whether you're swinging, stationary, or moving through the air.
 
