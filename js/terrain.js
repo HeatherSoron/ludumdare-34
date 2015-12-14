@@ -135,8 +135,14 @@ function heightAt(x) {
 	var tile = Math.floor(temp);
 	var subTile = temp - tile;
 
-	var tileHeight = heights[tile].left;
-	var diff = heights[tile + 1].right - tileHeight;
+	tile = heights[tile];
+
+	if (!tile) {
+		return seaLevel;
+	}
+
+	var tileHeight = tile.left;
+	var diff = tile.right - tileHeight;
 
 	return tileHeight + diff * subTile;
 }
