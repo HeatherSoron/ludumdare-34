@@ -11,7 +11,7 @@ var stepSize = tileSize / 4;
 
 var seaTiles = 10;
 
-var terrainIterations = 6;
+var terrainIterations = 7;
 var islandTiles;
 
 var islandWidth;
@@ -23,9 +23,9 @@ var worldHeight = 1200;
 
 var lines = [];
 
-var gravity = 300;
+var gravity = 450;
 
-var horizontalDrag = 500;
+var horizontalDrag = 1000;
 
 var terrainFrames = {
 	slope1: [3, 7, 19, 23],
@@ -64,12 +64,13 @@ function create() {
 	game.world.setBounds(-seaWidth, game.height - worldHeight, islandWidth + 2 * seaWidth, worldHeight);
 	game.physics.startSystem(Phaser.Physics.ARCADE);
 
-	game.stage.backgroundColor = 'rgb(0,0,255)';
+	game.stage.backgroundColor = 'rgb(0,127,255)';
 	
 	islandGroup = game.add.group();
 	islandGroup.enableBody = true;
 
 	makeTerrain();
+	console.log('Island Tile Number: ' + islandTiles);
 
 	player = game.add.sprite(0, 0, 'star');
 
@@ -144,7 +145,6 @@ function update() {
 
 	if (game.input.activePointer.isDown) {
 	//if (game.input.mouse.button === 0) {
-		console.log("pressed left");
 		// check whether we've already got an anchor point
 		if (anchor) {
 			grapple();
@@ -185,8 +185,8 @@ function spawnBush(x) {
 }
 
 function grapple() {
-	var lineStrength = 0.1;
-	var airResistance = 0.005;
+	var lineStrength = 0.2;
+	var airResistance = 0.05;
 
 	var offset = anchor.clone().subtract(player.body.position.x, player.body.position.y);
 	offset.multiply(lineStrength, lineStrength);
