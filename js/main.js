@@ -153,7 +153,16 @@ function throwSeed() {
 		seedSound.play();
 	}
 
-	var throwStrength = 500;
+	var throwStrength;
+	// apply only the barest throw strength if the player is not grounde
+	// apply no throw strength if the player is grappling, a small amount if moving (horiz) but not grappling, and a full amount if horizontally stationary
+	if (anchor) {
+		throwStrength = 0;
+	} else if (player.body.velocity.x != 0) {
+		throwStrength = 200;
+	} else {
+		throwStrength = 500;
+	}
 
 	// seeds are drawn at the player's z-depth
 	var seed = playerGroup.create(player.body.x, player.body.y, 'seed');
