@@ -3,7 +3,10 @@ var player;
 var cursors;
 var trees;
 var seeds = [];
+var vineballs = [];
 var anchor;
+
+var vineballCount = 6;
 
 var tileSize = 32;
 var stepSize = tileSize / 4;
@@ -55,10 +58,12 @@ var treeGroup;
 var islandGroup;
 var islandNoPhysGroup;
 var bushGroup;
+var vineballGroup;
 var playerGroup;
 
 function preload() {
 	game.load.image('seed', 'assets/seed.png');
+	game.load.image('vineball', 'assets/vineball.png');
 	game.load.spritesheet('player', 'assets/player.png', 64, 64);
 	game.load.spritesheet('tree1', 'assets/tree.png', treeWidth, 544);
 	game.load.spritesheet('tree2', 'assets/tree2.png', treeWidth, 544);
@@ -88,6 +93,8 @@ function create() {
 	islandNoPhysGroup = game.add.group();
 	bushGroup = game.add.group();
 
+	vineballGroup = game.add.group();
+
 	playerGroup = game.add.group();
 
 	makeTerrain();
@@ -96,6 +103,13 @@ function create() {
 	player.anchor.setTo(0.5, 0.5);
 	player.scale.x = -1;
 	player.animations.add('spin', [0,1,2,3,4,5,6,7], 10, true);
+
+	for (var i = 0; i < vineballCount; ++i) {
+		var vb = vineballGroup.create(0,0,'vineball');
+		vb.anchor.setTo(0.5, 0.5);
+		vb.visible = false;
+		vineballs.push(vb);
+	}
 
 	game.physics.arcade.enable(player);
 	player.body.gravity.y = gravity;
@@ -174,7 +188,6 @@ function update() {
 
 
 	if (game.input.activePointer.leftButton.isDown) {
-		console.log("pressed left");
 		// check whether we've already got an anchor point
 		if (anchor) {
 			grapple();
@@ -189,10 +202,16 @@ function update() {
 			if (anchor) {
 				grapple();
 				player.animations.play('spin');
+				vineballs.forEach(function(vb) {
+					vb.visible = true;
+				});
 			}
 		}
 	} else {
 		anchor = null;
+		vineballs.forEach(function(vb) {
+			vb.visible = false;
+		});
 	}
 
 	if (player.x > maxPlayerDistance) {
@@ -233,10 +252,18 @@ function grapple() {
 	var lineStrength = 0.1;
 	var airResistance = 0.005;
 
-	var offset = anchor.clone().subtract(player.body.position.x, player.body.position.y);
+	// why does Phaser use negative width for flipped sprites? NO idea.
+	var playerWidth = Math.abs(player.width);
+	var offset = anchor.clone().subtract(player.body.position.x + playerWidth / 2, player.body.position.y + player.height / 2);
+	var diff = offset.clone();
 	offset.multiply(lineStrength, lineStrength);
 	player.body.velocity.add(offset.x, offset.y);
 	player.body.velocity.multiply(1 - airResistance, 1 - airResistance);
+
+	var multPerBall = 1 / vineballs.length;
+	vineballs.forEach(function(vb, i) {
+		vb.position = diff.clone().multiply((i + 1) * multPerBall, (i + 1) * multPerBall).add(player.body.position.x + playerWidth / 2, player.body.position.y + player.height / 2); 
+	});
 }
 
 function render() {
@@ -247,8 +274,4 @@ function render() {
 	trees.forEach(function(t) {
 		//game.debug.geom(t.trunk);
 	});
-
-	if (anchor) {
-		game.debug.geom(new Phaser.Line(player.body.x, player.body.y, anchor.x, anchor.y));
-	}
 }
