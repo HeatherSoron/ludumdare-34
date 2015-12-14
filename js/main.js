@@ -65,6 +65,9 @@ function preload() {
 	game.load.spritesheet('bush', 'assets/bush.png', 16, 16);
 	game.load.spritesheet('terrain', 'assets/terrain.png', tileSize, tileSize);
 
+	// invisible sprite just so we can get collision working
+	game.load.image('collider', 'assets/physics_collider.png');
+
 	game.load.audio('seed', ['assets/audio/seed.mp3', 'assets/audio/seed.ogg']);
 	game.load.audio('bgm', ['assets/audio/bgm.mp3', 'assets/audio/bgm.ogg']);
 }

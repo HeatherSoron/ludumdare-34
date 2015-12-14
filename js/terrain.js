@@ -97,9 +97,8 @@ function makeTerrain() {
 		var randVariation = Math.floor(Math.random() * terrainVariations);
 		var frame = terrainFrames[frameName][randVariation];
 
-		var tile = islandGroup.create(x + tileSize / 2, tileHeight + tileSize / 2, 'terrain');
+		var tile = islandNoPhysGroup.create(x + tileSize / 2, tileHeight + tileSize / 2, 'terrain');
 		tile.anchor.setTo(0.5, 0.5);
-		tile.body.immovable = true;
 		tile.frame = frame;
 		if (flip) {
 			tile.scale.x = -1;
@@ -127,6 +126,26 @@ function makeTerrain() {
 		var x = i * width;
 		lines.push(new Phaser.Line(x, height.left, x + width, height.right));
 	});
+
+	// make colliders, which are more fine-grained than the actual visual objects
+	for (var x = 0; x < islandWidth; x += stepSize) {
+		var height = heightAt(x);
+		islandGroup.create(x, height, 'collider').body.immovable = true;
+		var prevHeight = heightAt(x - stepSize);
+		var nextHeight = heightAt(x + stepSize);
+		// check for cliffs, and outline them with colliders
+		if (prevHeight < height - stepSize) {
+			while (prevHeight < height - stepSize) {
+				height -= stepSize;
+				islandGroup.create(x, height, 'collider').body.immovable = true;
+			}
+		} else if (nextHeight < height - stepSize) {
+			while (nextHeight < height - stepSize) {
+				height -= stepSize;
+				islandGroup.create(x, height, 'collider').body.immovable = true;
+			}
+		}
+	}
 }
 
 function heightAt(x) {
