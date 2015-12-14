@@ -8,6 +8,8 @@ var anchor;
 
 var vineballCount = 6;
 
+var maxSeedCount = 2;
+
 var tileSize = 32;
 var stepSize = tileSize / 4;
 
@@ -149,6 +151,10 @@ function makeTree(x, y) {
 }
 
 function throwSeed() {
+	if (seeds.length >= maxSeedCount) {
+		return;
+	}
+
 	if (!seedSound.isPlaying) {
 		seedSound.play();
 	}
@@ -180,6 +186,10 @@ function update() {
 		if (game.physics.arcade.overlap(seeds[i], islandGroup)) {
 			var seed = seeds[i];
 			makeTree(seed.body.position.x - treeWidth / 2, heightAt(seed.body.position.x) - treeHeight);
+			seed.destroy();
+			seeds.splice(i, 1);
+		} else if (seeds[i].position.y > game.height) {
+			var seed = seeds[i];
 			seed.destroy();
 			seeds.splice(i, 1);
 		}
