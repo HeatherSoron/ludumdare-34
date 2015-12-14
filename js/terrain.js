@@ -1,5 +1,4 @@
 var heights = [];
-var terrainPrng;
 
 // deep magic here
 function iterateTerrain(segments, iterations) {
@@ -14,7 +13,7 @@ function iterateTerrain(segments, iterations) {
 			var l = segments[j];
 			var r = segments[j + 1];
 			// math black magic: take a random percentage (0% to 100%) of the difference in height, and then add that on top of the initial height
-			var mid = ((r - l) * terrainPrng.realInRange(0 - terrainDeviation, 1 + terrainDeviation)) + l;
+			var mid = ((r - l) * randBetween(0 - terrainDeviation, 1 + terrainDeviation)) + l;
 			// insert into the middle of the array
 			segments.splice(j + 1, 0, mid);
 		}
@@ -22,8 +21,6 @@ function iterateTerrain(segments, iterations) {
 }
 
 function makeTerrain() {
-	terrainPrng = new Phaser.RandomDataGenerator();
-
 	// array of segment heights
 	var segments = [0, 0.6, -0.2, 1, 0.5, 0];
 	
