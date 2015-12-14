@@ -63,6 +63,8 @@ var bushGroup;
 var vineballGroup;
 var playerGroup;
 
+var treePeakHeights = [479, 489, 322, 539, 443, 480, 162, 410, 484, 481, 176];
+
 function preload() {
 	game.load.image('seed', 'assets/seed.png');
 	game.load.image('vineball', 'assets/vineball.png');
@@ -170,7 +172,8 @@ function makeTree(x, y) {
 	tree.animations.add('grow', [0, 1, 2, 3, 4, 5, 6], 4, false);
 	tree.animations.play('grow');
 	var center = tree.x + tree.width / 2;
-	tree.trunk = new Phaser.Line(center, tree.y, center, game.height);
+	tree.trunk = new Phaser.Line(center, tree.y, center, (tree.y - treePeakHeights[variation-1])); /////////////
+	game.debug.geom(tree.trunk);
 	trees.push(tree);
 
 }
