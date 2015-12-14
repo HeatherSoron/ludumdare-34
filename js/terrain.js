@@ -58,7 +58,6 @@ function makeTerrain() {
 		var x = i * width;
 		var left = segments[i];
 		var right = segments[i + 1];
-		lines.push(new Phaser.Line(x, left, x + width, right));
 		
 		var steps = calcSteps(i);
 		var flip = false;
@@ -73,7 +72,6 @@ function makeTerrain() {
 		var tileHeight = Math.min(left, right);
 
 		if (steps == 0) {
-			console.log(calcSteps(i-1), calcSteps(i));
 			if (i > 0 && calcSteps(i - 1) < -4) {
 				tileHeight -= stepSize;
 				steps = 1;
@@ -107,7 +105,15 @@ function makeTerrain() {
 			tile.scale.x = -1;
 		}
 
-		heights.push(left);
+		var heightObj = {};
+		if (flip) {
+			heightObj.left = tileHeight;
+			heightObj.right = tileHeight + stepSize * steps;
+		} else {
+			heightObj.left = tileHeight + stepSize * steps;
+			heightObj.right = tileHeight;
+		}
+		heights.push(heightObj);
 
 		while (tileHeight < game.height) {
 			tileHeight += tileSize;
@@ -116,8 +122,11 @@ function makeTerrain() {
 			islandNoPhysGroup.create(x, tileHeight, 'terrain').frame = terrainFrames['full'][randVariation];
 		}
 	}
-	// need to push ONE more entry onto heights, for the end. Luckily, it's the same height as the start.
-	heights.push(segments[0]);
+
+	heights.forEach(function(height, i) {
+		var x = i * width;
+		lines.push(new Phaser.Line(x, height.left, x + width, height.right));
+	});
 }
 
 function heightAt(x) {
@@ -126,8 +135,8 @@ function heightAt(x) {
 	var tile = Math.floor(temp);
 	var subTile = temp - tile;
 
-	var tileHeight = heights[tile];
-	var diff = heights[tile + 1] - tileHeight;
+	var tileHeight = heights[tile].left;
+	var diff = heights[tile + 1].right - tileHeight;
 
 	return tileHeight + diff * subTile;
 }
