@@ -51,10 +51,10 @@ var treeWidth = 72;
 
 function preload() {
 	game.load.image('diamond', 'assets/diamond.png');
-	game.load.spritesheet('player', 'assets/player.png', 32, 32);
+	game.load.spritesheet('player', 'assets/player.png', 64, 64);
 	game.load.spritesheet('tree', 'assets/tree.png', treeWidth, 544);
 	game.load.spritesheet('tree2', 'assets/tree2.png', treeWidth, 544);
-	game.load.spritesheet('bush', 'assets/bush.png', 16, 16);
+	game.load.spritesheet('bush', 'assets/bush.png', 32, 32);
 	game.load.spritesheet('terrain', 'assets/terrain.png', tileSize, tileSize);
 }
 
