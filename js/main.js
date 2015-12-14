@@ -74,7 +74,7 @@ function create() {
 	player = game.add.sprite(0, 0, 'player');
 	player.anchor.setTo(0.5, 0.5);
 	player.scale.x = -1;
-	player.animations.add('spin', [0,1,2,3,4,5,6,7], 10, true);
+	player.animations.add('spin', [0,1,2,3,4,5,6,7], 20, true);
 
 	game.physics.arcade.enable(player);
 	player.body.gravity.y = gravity;
