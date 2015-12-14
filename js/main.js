@@ -63,7 +63,10 @@ var bushGroup;
 var vineballGroup;
 var playerGroup;
 
+var stats;
+
 var treePeakHeights = [479, 489, 322, 539, 443, 480, 162, 410, 484, 481, 176];
+
 
 function preload() {
 	game.load.image('seed', 'assets/seed.png');
@@ -164,6 +167,9 @@ function create() {
 	music.play();
 
 	seedSound = game.add.audio('seed');
+
+	stats = new Stats();
+	stats.show();
 }
 
 function makeTree(x, y) {
@@ -175,6 +181,8 @@ function makeTree(x, y) {
 	var canopy = tree.height - treePeakHeights[variation - 1];
 	tree.trunk = new Phaser.Line(center, tree.y + canopy, center, tree.y + tree.height); /////////////
 	trees.push(tree);
+
+	stats.update('treeCount', 1);
 
 }
 
@@ -275,6 +283,9 @@ function update() {
 	} else if (player.body.velocity.x > 1) {
 		player.scale.x = -1;
 	}
+
+	stats.update('maxSpeed', Math.round(player.body.velocity.getMagnitude()));
+	stats.update('maxHeight', Math.round(game.height - player.body.position.y));
 }
 
 function spawnBush(x) {
