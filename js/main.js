@@ -60,7 +60,7 @@ var playerGroup;
 function preload() {
 	game.load.image('seed', 'assets/seed.png');
 	game.load.spritesheet('player', 'assets/player.png', 64, 64);
-	game.load.spritesheet('tree', 'assets/tree.png', treeWidth, 544);
+	game.load.spritesheet('tree1', 'assets/tree.png', treeWidth, 544);
 	game.load.spritesheet('tree2', 'assets/tree2.png', treeWidth, 544);
 	game.load.spritesheet('bush', 'assets/bush.png', 32, 32);
 	game.load.spritesheet('terrain', 'assets/terrain.png', tileSize, tileSize);
@@ -124,15 +124,8 @@ function create() {
 }
 
 function makeTree(x, y) {
-	var tree;
-	switch (Math.floor(Math.random() * treeVariations)) {
-			case 0:
-				tree = treeGroup.create(x, y, 'tree');
-				break;
-			case 1:
-				tree = treeGroup.create(x, y, 'tree2');
-				break;
-		}
+	var variation = Math.floor(Math.random() * treeVariations) + 1;
+	var tree = treeGroup.create(x, y, 'tree' + variation);
 	tree.animations.add('grow', [0, 1, 2, 3, 4, 5, 6], 4, false);
 	tree.animations.play('grow');
 	var center = tree.x + tree.width / 2;
@@ -231,7 +224,7 @@ function spawnBush(x) {
 	bush.anchor.setTo(0.5, 0.5);
 	bush.angle = rotation;
 
-	var size = 4;
+	var size = 2;
 	bush.scale.x = size;
 	bush.scale.y = size;
 }
