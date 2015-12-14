@@ -6,7 +6,7 @@ var seeds = [];
 var vineballs = [];
 var anchor;
 
-var vineballCount = 6;
+var vineballCount = 66;
 
 var maxSeedCount = 4;
 
