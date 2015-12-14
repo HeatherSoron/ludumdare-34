@@ -188,13 +188,17 @@ function update() {
 }
 
 function spawnBush(x) {
-	var bush = game.add.sprite(x, heightAt(x), 'bush');
+	var bush = game.add.sprite(x, heightAt(x) + 10, 'bush');
 	var variation = Math.floor(Math.random() * bushVariations);
 	bush.frame = variation;
 
 	var rotation = Math.floor(Math.random() * 4) * 90;
 	bush.anchor.setTo(0.5, 0.5);
 	bush.angle = rotation;
+
+	var size = 4;
+	bush.scale.x = size;
+	bush.scale.y = size;
 }
 
 function grapple() {
@@ -213,7 +217,7 @@ function render() {
 	});
 
 	trees.forEach(function(t) {
-		game.debug.geom(t.trunk);
+		//game.debug.geom(t.trunk);
 	});
 
 	if (anchor) {
