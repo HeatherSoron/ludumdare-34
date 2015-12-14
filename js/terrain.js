@@ -28,7 +28,7 @@ function makeTerrain() {
 	iterateTerrain(segments, terrainIterations);
 
 
-	islandTiles = segments.length - 0;
+	islandTiles = segments.length - 1;
 	islandWidth = islandTiles * tileSize;
 
 	var width = islandWidth / (segments.length - 1);
