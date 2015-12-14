@@ -220,7 +220,11 @@ function update() {
 }
 
 function spawnBush(x) {
-	var bush = bushGroup.create(x, heightAt(x) + 10, 'bush');
+	var height = heightAt(x);
+	if (height === undefined) {
+		return;
+	}
+	var bush = bushGroup.create(x, height + 10, 'bush');
 	var variation = Math.floor(Math.random() * bushVariations);
 	bush.frame = variation;
 

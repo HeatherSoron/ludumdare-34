@@ -157,7 +157,7 @@ function heightAt(x) {
 	tile = heights[tile];
 
 	if (!tile) {
-		return seaLevel;
+		return undefined;
 	}
 
 	var tileHeight = tile.left;
