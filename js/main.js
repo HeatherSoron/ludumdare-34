@@ -111,7 +111,6 @@ function addSky() {
 function create() {
 	trees = [];
 
-	game.world.setBounds(-seaWidth, game.height - worldHeight, islandWidth + 2 * seaWidth, worldHeight);
 	game.physics.startSystem(Phaser.Physics.ARCADE);
 
 	addSky();
@@ -129,6 +128,8 @@ function create() {
 	playerGroup = game.add.group();
 
 	makeTerrain();
+
+	game.world.setBounds(-seaWidth, game.height - worldHeight, islandWidth + 2 * seaWidth, worldHeight);
 
 	player = playerGroup.create(0, 0, 'player');
 	player.anchor.setTo(0.5, 0.5);
