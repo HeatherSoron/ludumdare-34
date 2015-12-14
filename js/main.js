@@ -48,6 +48,8 @@ var treeHeight = 530;
 // width is the same as sprite width, though
 var treeWidth = 72;
 
+var music;
+var seedSound;
 
 var treeGroup;
 var islandGroup;
@@ -62,6 +64,9 @@ function preload() {
 	game.load.spritesheet('tree2', 'assets/tree2.png', treeWidth, 544);
 	game.load.spritesheet('bush', 'assets/bush.png', 16, 16);
 	game.load.spritesheet('terrain', 'assets/terrain.png', tileSize, tileSize);
+
+	game.load.audio('seed', ['assets/audio/seed.mp3', 'assets/audio/seed.ogg']);
+	game.load.audio('bgm', ['assets/audio/bgm.mp3', 'assets/audio/bgm.ogg']);
 }
 
 function create() {
@@ -107,6 +112,12 @@ function create() {
 	});
 
 	game.camera.follow(player);
+
+	music = game.add.audio('bgm');
+	music.loop = true;
+	music.play();
+
+	seedSound = game.add.audio('seed');
 }
 
 function makeTree(x, y) {
@@ -128,6 +139,10 @@ function makeTree(x, y) {
 }
 
 function throwSeed() {
+	if (!seedSound.isPlaying) {
+		seedSound.play();
+	}
+
 	var throwStrength = 500;
 
 	// seeds are drawn at the player's z-depth
