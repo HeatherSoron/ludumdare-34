@@ -79,14 +79,29 @@ function preload() {
 	game.load.audio('bgm', ['assets/audio/bgm.mp3', 'assets/audio/bgm.ogg']);
 }
 
+function addSky() {
+	var myBitmap = game.add.bitmapData(game.width, game.height);
+
+	var grd=myBitmap.context.createLinearGradient(0, 0, 0, game.height);
+	grd.addColorStop(0, "#def");
+	grd.addColorStop(1, "#0a68b0");
+	myBitmap.context.fillStyle=grd;
+	myBitmap.context.fillRect(0, 0, game.width, game.height);
+
+	myBitmap.context.fillStyle=grd;
+	myBitmap.context.fillRect(0,580,800,20);
+
+	game.add.sprite(0, 0, myBitmap).fixedToCamera = true;
+}
+
 function create() {
 	trees = [];
 
 	game.world.setBounds(-seaWidth, game.height - worldHeight, islandWidth + 2 * seaWidth, worldHeight);
 	game.physics.startSystem(Phaser.Physics.ARCADE);
 
-	game.stage.backgroundColor = 'rgb(0,0,255)';
-	
+	addSky();
+
 	treeGroup = game.add.group();
 
 	islandGroup = game.add.group();
