@@ -41,7 +41,7 @@ var terrainFrames = {
 
 var terrainVariations = 4;
 
-var treeVariations = 11;
+var treeVariations = 19;
 
 var maxPlayerDistance = 0;
 // 1 in n chance for a bush
@@ -83,6 +83,14 @@ function preload() {
 	game.load.spritesheet('tree9', 'assets/tree9.png', treeWidth, 544);
 	game.load.spritesheet('tree10', 'assets/tree10.png', treeWidth, 544);
 	game.load.spritesheet('tree11', 'assets/tree11.png', treeWidth, 544);
+	game.load.spritesheet('tree12', 'assets/tree12.png', treeWidth, 544);
+	game.load.spritesheet('tree13', 'assets/tree13.png', treeWidth, 544);
+	game.load.spritesheet('tree14', 'assets/tree14.png', treeWidth, 544);
+	game.load.spritesheet('tree15', 'assets/tree15.png', treeWidth, 544);
+	game.load.spritesheet('tree16', 'assets/tree16.png', treeWidth, 544);
+	game.load.spritesheet('tree17', 'assets/tree17.png', treeWidth, 544);
+	game.load.spritesheet('tree18', 'assets/tree18.png', treeWidth, 544);
+	game.load.spritesheet('tree19', 'assets/tree19.png', treeWidth, 544);
 	game.load.spritesheet('bush', 'assets/bush.png', 32, 32);
 	game.load.spritesheet('terrain', 'assets/terrain.png', tileSize, tileSize);
 
