@@ -49,18 +49,39 @@ function makeTerrain() {
 		return height;
 	});
 
+	function calcSteps(i) {
+		// do left - right because negative numbers are UP
+		return (segments[i] - segments[i + 1]) / stepSize;
+	}
+
 	for (var i = 0; i < segments.length - 1; ++i) {
 		var x = i * width;
 		var left = segments[i];
 		var right = segments[i + 1];
 		lines.push(new Phaser.Line(x, left, x + width, right));
 		
-		// do left - right because negative numbers are UP
-		var steps = (left - right) / stepSize;
+		var steps = calcSteps(i);
 		var flip = false;
 		if (steps < 0) {
 			flip = true;
 			steps = -steps;
+		}
+		if (steps > 4) {
+			steps = 4;
+		}
+
+		var tileHeight = Math.min(left, right);
+
+		if (steps == 0) {
+			console.log(calcSteps(i-1), calcSteps(i));
+			if (i > 0 && calcSteps(i - 1) < -4) {
+				tileHeight -= stepSize;
+				steps = 1;
+				flip = true;
+			} else if (calcSteps(i + 1) > 4) {
+				tileHeight -= stepSize;
+				steps = 1;
+			}
 		}
 	
 		var frameName;
@@ -78,7 +99,6 @@ function makeTerrain() {
 		var randVariation = Math.floor(Math.random() * terrainVariations);
 		var frame = terrainFrames[frameName][randVariation];
 
-		var tileHeight = Math.min(left, right);
 		var tile = islandGroup.create(x + tileSize / 2, tileHeight + tileSize / 2, 'terrain');
 		tile.anchor.setTo(0.5, 0.5);
 		tile.body.immovable = true;
