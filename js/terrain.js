@@ -93,7 +93,7 @@ function makeTerrain() {
 			tileHeight += tileSize;
 			randVariation = Math.floor(Math.random() * terrainVariations);
 			// don't need physics on these (hopefully), so don't add them in the islandGroup
-			game.add.sprite(x, tileHeight, 'terrain').frame = terrainFrames['full'][randVariation];
+			islandNoPhysGroup.create(x, tileHeight, 'terrain').frame = terrainFrames['full'][randVariation];
 		}
 	}
 	// need to push ONE more entry onto heights, for the end. Luckily, it's the same height as the start.

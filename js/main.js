@@ -3,7 +3,6 @@ var player;
 var cursors;
 var trees;
 var seeds = [];
-var islandGroup;
 var anchor;
 
 var tileSize = 32;
@@ -49,6 +48,13 @@ var treeHeight = 530;
 // width is the same as sprite width, though
 var treeWidth = 72;
 
+
+var treeGroup;
+var islandGroup;
+var islandNoPhysGroup;
+var bushGroup;
+var playerGroup;
+
 function preload() {
 	game.load.image('seed', 'assets/seed.png');
 	game.load.spritesheet('player', 'assets/player.png', 32, 32);
@@ -66,12 +72,19 @@ function create() {
 
 	game.stage.backgroundColor = 'rgb(0,0,255)';
 	
+	treeGroup = game.add.group();
+
 	islandGroup = game.add.group();
 	islandGroup.enableBody = true;
 
+	islandNoPhysGroup = game.add.group();
+	bushGroup = game.add.group();
+
+	playerGroup = game.add.group();
+
 	makeTerrain();
 
-	player = game.add.sprite(0, 0, 'player');
+	player = playerGroup.create(0, 0, 'player');
 	player.anchor.setTo(0.5, 0.5);
 	player.scale.x = -1;
 	player.animations.add('spin', [0,1,2,3,4,5,6,7], 10, true);
@@ -100,10 +113,10 @@ function makeTree(x, y) {
 	var tree;
 	switch (Math.floor(Math.random() * treeVariations)) {
 			case 0:
-				tree = game.add.sprite(x, y, 'tree');
+				tree = treeGroup.create(x, y, 'tree');
 				break;
 			case 1:
-				tree = game.add.sprite(x, y, 'tree2');
+				tree = treeGroup.create(x, y, 'tree2');
 				break;
 		}
 	tree.animations.add('grow', [0, 1, 2, 3, 4, 5, 6], 4, false);
@@ -117,7 +130,8 @@ function makeTree(x, y) {
 function throwSeed() {
 	var throwStrength = 500;
 
-	var seed = game.add.sprite(player.body.x, player.body.y, 'seed');
+	// seeds are drawn at the player's z-depth
+	var seed = playerGroup.create(player.body.x, player.body.y, 'seed');
 	game.physics.arcade.enable(seed);
 	seed.body.gravity.y = gravity;
 
@@ -188,7 +202,7 @@ function update() {
 }
 
 function spawnBush(x) {
-	var bush = game.add.sprite(x, heightAt(x) + 10, 'bush');
+	var bush = bushGroup.create(x, heightAt(x) + 10, 'bush');
 	var variation = Math.floor(Math.random() * bushVariations);
 	bush.frame = variation;
 
