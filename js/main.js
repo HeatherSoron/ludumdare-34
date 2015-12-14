@@ -8,7 +8,7 @@ var anchor;
 
 var vineballCount = 6;
 
-var maxSeedCount = 2;
+var maxSeedCount = 4;
 
 var tileSize = 32;
 var stepSize = tileSize / 4;
