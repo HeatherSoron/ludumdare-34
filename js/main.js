@@ -48,8 +48,8 @@ var treeHeight = 530;
 var treeWidth = 72;
 
 function preload() {
-	game.load.image('star', 'assets/star.png');
 	game.load.image('diamond', 'assets/diamond.png');
+	game.load.spritesheet('player', 'assets/player.png', 32, 32);
 	game.load.spritesheet('tree', 'assets/tree.png', treeWidth, 544);
 	game.load.spritesheet('bush', 'assets/bush.png', 16, 16);
 	game.load.spritesheet('terrain', 'assets/terrain.png', tileSize, tileSize);
@@ -68,7 +68,10 @@ function create() {
 
 	makeTerrain();
 
-	player = game.add.sprite(0, 0, 'star');
+	player = game.add.sprite(0, 0, 'player');
+	player.anchor.setTo(0.5, 0.5);
+	player.scale.x = -1;
+	player.animations.add('spin', [0,1,2,3,4,5,6,7], 10, true);
 
 	game.physics.arcade.enable(player);
 	player.body.gravity.y = gravity;
@@ -126,6 +129,9 @@ function update() {
 	// we need to collide first, and THEN give the velocity a kick away from the collision site
 	if (game.physics.arcade.collide(player, islandGroup)) {
 		player.body.drag.x = horizontalDrag;
+		if (!anchor) {
+			player.animations.stop();
+		}
 	} else {
 		player.body.drag.x = 0;
 	}
@@ -145,6 +151,7 @@ function update() {
 			});
 			if (anchor) {
 				grapple();
+				player.animations.play('spin');
 			}
 		}
 	} else {
@@ -158,6 +165,12 @@ function update() {
 			}
 		}
 		maxPlayerDistance = player.x;
+	}
+
+	if (player.body.velocity.x < -1) {
+		player.scale.x = 1;
+	} else if (player.body.velocity.x > 1) {
+		player.scale.x = -1;
 	}
 }
 
