@@ -37,6 +37,8 @@ var terrainFrames = {
 
 var terrainVariations = 4;
 
+var treeVariations = 2;
+
 var maxPlayerDistance = 0;
 // 1 in n chance for a bush
 var bushInvChance = 24;
@@ -51,6 +53,7 @@ function preload() {
 	game.load.image('diamond', 'assets/diamond.png');
 	game.load.spritesheet('player', 'assets/player.png', 32, 32);
 	game.load.spritesheet('tree', 'assets/tree.png', treeWidth, 544);
+	game.load.spritesheet('tree2', 'assets/tree2.png', treeWidth, 544);
 	game.load.spritesheet('bush', 'assets/bush.png', 16, 16);
 	game.load.spritesheet('terrain', 'assets/terrain.png', tileSize, tileSize);
 }
@@ -94,7 +97,15 @@ function create() {
 }
 
 function makeTree(x, y) {
-	var tree = game.add.sprite(x, y, 'tree');
+	var tree;
+	switch (Math.floor(Math.random() * treeVariations)) {
+			case 0:
+				tree = game.add.sprite(x, y, 'tree');
+				break;
+			case 1:
+				tree = game.add.sprite(x, y, 'tree2');
+				break;
+		}
 	tree.animations.add('grow', [0, 1, 2, 3, 4, 5, 6], 4, false);
 	tree.animations.play('grow');
 	var center = tree.x + tree.width / 2;
@@ -138,13 +149,15 @@ function update() {
 
 
 	if (game.input.activePointer.isDown) {
+	//if (game.input.mouse.button === 0) {
+		console.log("pressed left");
 		// check whether we've already got an anchor point
 		if (anchor) {
 			grapple();
 		} else {
 			var ray = new Phaser.Line(player.body.position.x, player.body.position.y, game.input.activePointer.worldX, game.input.activePointer.worldY);
 			trees.forEach(function(tree) {
-				var p = ray.intersects(tree.trunk, true);
+				var p = ray.intersects(tree.trunk, true); //returns intercept point
 				if (p && (!anchor || p.distance(getMouseWorldPos()) < anchor.distance(getMouseWorldPos()))) {
 					anchor = p;
 				}
