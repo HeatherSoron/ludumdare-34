@@ -44,13 +44,16 @@ var maxPlayerDistance = 0;
 var bushInvChance = 24;
 var bushVariations = 24;
 
+// the height is how tall we treat it as in-game, NOT how tall the sprite is
 var treeHeight = 530;
+// width is the same as sprite width, though
+var treeWidth = 72;
 
 function preload() {
 	game.load.image('star', 'assets/star.png');
 	game.load.image('diamond', 'assets/diamond.png');
-	game.load.spritesheet('tree', 'assets/tree.png', 72, 544);
-	game.load.spritesheet('tree2', 'assets/tree2.png', 72, 544);
+	game.load.spritesheet('tree', 'assets/tree.png', treeWidth, 544);
+	game.load.spritesheet('tree2', 'assets/tree2.png', treeWidth, 544);
 	game.load.spritesheet('bush', 'assets/bush.png', 16, 16);
 	game.load.spritesheet('terrain', 'assets/terrain.png', tileSize, tileSize);
 }
@@ -125,7 +128,7 @@ function update() {
 	for (var i = seeds.length - 1; i >= 0; --i) {
 		if (game.physics.arcade.overlap(seeds[i], islandGroup)) {
 			var seed = seeds[i];
-			makeTree(seed.body.position.x, seed.body.position.y - treeHeight);
+			makeTree(seed.body.position.x - treeWidth / 2, heightAt(seed.body.position.x) - treeHeight);
 			seed.destroy();
 			seeds.splice(i, 1);
 		}
@@ -172,7 +175,7 @@ function update() {
 }
 
 function spawnBush(x) {
-	var bush = game.add.sprite(x, seaLevel, 'bush');
+	var bush = game.add.sprite(x, heightAt(x), 'bush');
 	var variation = Math.floor(Math.random() * bushVariations);
 	bush.frame = variation;
 
