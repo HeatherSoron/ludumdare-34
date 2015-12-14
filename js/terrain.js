@@ -1,10 +1,8 @@
 var heights = [];
 
-function makeTerrain() {
-	// array of segment heights
-	var segments = [0, 0.6, 0, 0.6, 0];
-
-	for (var i = 0; i < terrainIterations; ++i) {
+// deep magic here
+function iterateTerrain(segments, iterations) {
+	for (var i = 0; i < iterations; ++i) {
 		// increment by 2 each time, because we add another element each iteration
 		// also, skip the last iteration, because otherwise j+1 is undefined
 		for (var j = 0; j < segments.length - 1; j += 2) {
@@ -16,6 +14,15 @@ function makeTerrain() {
 			segments.splice(j + 1, 0, mid);
 		}
 	}
+}
+
+function makeTerrain() {
+	// array of segment heights
+	var segments = [0, 0.6, -0.2, 1, 0.5, 0];
+	
+	// note that by having iterateTerrain as a function, we can do several passes. e.g., several separate islands
+	iterateTerrain(segments, terrainIterations);
+
 
 	islandTiles = segments.length - 1;
 	islandWidth = islandTiles * tileSize;
