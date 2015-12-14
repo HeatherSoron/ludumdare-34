@@ -180,8 +180,7 @@ function update() {
 	}
 
 
-	if (game.input.activePointer.isDown) {
-	//if (game.input.mouse.button === 0) {
+	if (game.input.activePointer.leftButton.isDown) {
 		console.log("pressed left");
 		// check whether we've already got an anchor point
 		if (anchor) {
