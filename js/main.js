@@ -314,5 +314,5 @@ function grapple() {
 }
 
 function render() {
-	trees.forEach(function(tree) { game.debug.geom(tree.trunk); });
+	//trees.forEach(function(tree) { game.debug.geom(tree.trunk); });
 }
