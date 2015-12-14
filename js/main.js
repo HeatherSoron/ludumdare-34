@@ -286,11 +286,4 @@ function grapple() {
 }
 
 function render() {
-	lines.forEach(function(l) {
-		game.debug.geom(l);
-	});
-
-	trees.forEach(function(t) {
-		//game.debug.geom(t.trunk);
-	});
 }
