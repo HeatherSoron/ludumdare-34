@@ -169,7 +169,7 @@ function create() {
 function makeTree(x, y) {
 	var variation = Math.floor(Math.random() * treeVariations) + 1;
 	var tree = treeGroup.create(x, y, 'tree' + variation);
-	tree.animations.add('grow', [0, 1, 2, 3, 4, 5, 6], 4, false);
+	tree.animations.add('grow', [0, 1, 2, 3, 4, 5, 6, 7], 4, false);
 	tree.animations.play('grow');
 	var center = tree.x + tree.width / 2;
 	var canopy = tree.height - treePeakHeights[variation - 1];
