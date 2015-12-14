@@ -172,8 +172,8 @@ function makeTree(x, y) {
 	tree.animations.add('grow', [0, 1, 2, 3, 4, 5, 6], 4, false);
 	tree.animations.play('grow');
 	var center = tree.x + tree.width / 2;
-	tree.trunk = new Phaser.Line(center, tree.y, center, (tree.y - treePeakHeights[variation-1])); /////////////
-	game.debug.geom(tree.trunk);
+	var canopy = tree.height - treePeakHeights[variation - 1];
+	tree.trunk = new Phaser.Line(center, tree.y + canopy, center, tree.y + tree.height); /////////////
 	trees.push(tree);
 
 }
@@ -314,4 +314,5 @@ function grapple() {
 }
 
 function render() {
+	trees.forEach(function(tree) { game.debug.geom(tree.trunk); });
 }
