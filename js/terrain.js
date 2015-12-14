@@ -49,18 +49,37 @@ function makeTerrain() {
 		return height;
 	});
 
+	function calcSteps(i) {
+		// do left - right because negative numbers are UP
+		return (segments[i] - segments[i + 1]) / stepSize;
+	}
+
 	for (var i = 0; i < segments.length - 1; ++i) {
 		var x = i * width;
 		var left = segments[i];
 		var right = segments[i + 1];
-		lines.push(new Phaser.Line(x, left, x + width, right));
 		
-		// do left - right because negative numbers are UP
-		var steps = (left - right) / stepSize;
+		var steps = calcSteps(i);
 		var flip = false;
 		if (steps < 0) {
 			flip = true;
 			steps = -steps;
+		}
+		if (steps > 4) {
+			steps = 4;
+		}
+
+		var tileHeight = Math.min(left, right);
+
+		if (steps == 0) {
+			if (i > 0 && calcSteps(i - 1) < -4) {
+				tileHeight -= stepSize;
+				steps = 1;
+				flip = true;
+			} else if (calcSteps(i + 1) > 4) {
+				tileHeight -= stepSize;
+				steps = 1;
+			}
 		}
 	
 		var frameName;
@@ -78,26 +97,55 @@ function makeTerrain() {
 		var randVariation = Math.floor(Math.random() * terrainVariations);
 		var frame = terrainFrames[frameName][randVariation];
 
-		var tileHeight = Math.min(left, right);
-		var tile = islandGroup.create(x + tileSize / 2, tileHeight + tileSize / 2, 'terrain');
+		var tile = islandNoPhysGroup.create(x + tileSize / 2, tileHeight + tileSize / 2, 'terrain');
 		tile.anchor.setTo(0.5, 0.5);
-		tile.body.immovable = true;
 		tile.frame = frame;
 		if (flip) {
 			tile.scale.x = -1;
 		}
 
-		heights.push(left);
+		var heightObj = {};
+		if (flip) {
+			heightObj.left = tileHeight;
+			heightObj.right = tileHeight + stepSize * steps;
+		} else {
+			heightObj.left = tileHeight + stepSize * steps;
+			heightObj.right = tileHeight;
+		}
+		heights.push(heightObj);
 
 		while (tileHeight < game.height) {
 			tileHeight += tileSize;
 			randVariation = Math.floor(Math.random() * terrainVariations);
 			// don't need physics on these (hopefully), so don't add them in the islandGroup
-			game.add.sprite(x, tileHeight, 'terrain').frame = terrainFrames['full'][randVariation];
+			islandNoPhysGroup.create(x, tileHeight, 'terrain').frame = terrainFrames['full'][randVariation];
 		}
 	}
-	// need to push ONE more entry onto heights, for the end. Luckily, it's the same height as the start.
-	heights.push(segments[0]);
+
+	heights.forEach(function(height, i) {
+		var x = i * width;
+		lines.push(new Phaser.Line(x, height.left, x + width, height.right));
+	});
+
+	// make colliders, which are more fine-grained than the actual visual objects
+	for (var x = 0; x < islandWidth; x += stepSize) {
+		var height = heightAt(x);
+		islandGroup.create(x, height, 'collider').body.immovable = true;
+		var prevHeight = heightAt(x - stepSize);
+		var nextHeight = heightAt(x + stepSize);
+		// check for cliffs, and outline them with colliders
+		if (prevHeight < height - stepSize) {
+			while (prevHeight < height - stepSize) {
+				height -= stepSize;
+				islandGroup.create(x, height, 'collider').body.immovable = true;
+			}
+		} else if (nextHeight < height - stepSize) {
+			while (nextHeight < height - stepSize) {
+				height -= stepSize;
+				islandGroup.create(x, height, 'collider').body.immovable = true;
+			}
+		}
+	}
 }
 
 function heightAt(x) {
@@ -106,8 +154,14 @@ function heightAt(x) {
 	var tile = Math.floor(temp);
 	var subTile = temp - tile;
 
-	var tileHeight = heights[tile];
-	var diff = heights[tile + 1] - tileHeight;
+	tile = heights[tile];
+
+	if (!tile) {
+		return seaLevel;
+	}
+
+	var tileHeight = tile.left;
+	var diff = tile.right - tileHeight;
 
 	return tileHeight + diff * subTile;
 }
