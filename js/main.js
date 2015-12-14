@@ -119,6 +119,7 @@ function create() {
 
 	cursors = game.input.keyboard.createCursorKeys();
 	
+	game.input.keyboard.onDownCallback = throwSeed;
 	game.input.mouse.mouseDownCallback = function(e) {
 		if (e.button === Phaser.Mouse.RIGHT_BUTTON) {
 			throwSeed();
