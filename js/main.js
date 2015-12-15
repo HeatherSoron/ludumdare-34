@@ -63,7 +63,14 @@ var bushGroup;
 var vineballGroup;
 var playerGroup;
 
+<<<<<<< HEAD
 var treePeakHeights = [479, 489, 322, 539, 443, 480, 162, 410, 484, 481, 176, 0, 0, 0, 0];
+=======
+var stats;
+
+var treePeakHeights = [479, 489, 322, 539, 443, 480, 162, 410, 484, 481, 176];
+>>>>>>> 3deb6db9ca21c081bb2ecc442f53eb4d2b91f022
+
 
 function preload() {
 	game.load.image('seed', 'assets/seed.png');
@@ -103,16 +110,24 @@ function addSky() {
 	myBitmap.context.fillStyle=grd;
 	myBitmap.context.fillRect(0, 0, game.width, game.height);
 
-	myBitmap.context.fillStyle=grd;
-	myBitmap.context.fillRect(0,580,800,20);
-
 	game.add.sprite(0, 0, myBitmap).fixedToCamera = true;
+}
+
+function addSea() {
+	var myBitmap = game.add.bitmapData(islandWidth + 2 * seaWidth, game.height - (seaLevel + 10));
+
+	var grd=myBitmap.context.createLinearGradient(0, 0, 0, game.height - (seaLevel + 10));
+	grd.addColorStop(0, "rgba(0, 80, 200, 0.5)");
+	grd.addColorStop(1, "rgba(0, 0, 50, 0.8)");
+	myBitmap.context.fillStyle=grd;
+	myBitmap.context.fillRect(0, 0, islandWidth + 2 * seaWidth, game.height - (seaLevel + 10));
+
+	game.add.sprite(-seaWidth, seaLevel + 10, myBitmap);
 }
 
 function create() {
 	trees = [];
 
-	game.world.setBounds(-seaWidth, game.height - worldHeight, islandWidth + 2 * seaWidth, worldHeight);
 	game.physics.startSystem(Phaser.Physics.ARCADE);
 
 	addSky();
@@ -130,6 +145,8 @@ function create() {
 	playerGroup = game.add.group();
 
 	makeTerrain();
+
+	game.world.setBounds(-seaWidth, game.height - worldHeight, islandWidth + 2 * seaWidth, worldHeight);
 
 	player = playerGroup.create(0, 0, 'player');
 	player.anchor.setTo(0.5, 0.5);
@@ -168,6 +185,11 @@ function create() {
 	music.play();
 
 	seedSound = game.add.audio('seed');
+
+	addSea();
+
+	stats = new Stats();
+	stats.show();
 }
 
 function makeTree(x, y) {
@@ -179,6 +201,8 @@ function makeTree(x, y) {
 	var canopy = tree.height - treePeakHeights[variation - 1];
 	tree.trunk = new Phaser.Line(center, tree.y + canopy, center, tree.y + tree.height); /////////////
 	trees.push(tree);
+
+	stats.update('treeCount', 1);
 
 }
 
@@ -279,6 +303,9 @@ function update() {
 	} else if (player.body.velocity.x > 1) {
 		player.scale.x = -1;
 	}
+
+	stats.update('maxSpeed', Math.round(player.body.velocity.getMagnitude()));
+	stats.update('maxHeight', Math.round(game.height - player.body.position.y));
 }
 
 function spawnBush(x) {
