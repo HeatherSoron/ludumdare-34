@@ -63,13 +63,9 @@ var bushGroup;
 var vineballGroup;
 var playerGroup;
 
-<<<<<<< HEAD
-var treePeakHeights = [479, 489, 322, 539, 443, 480, 162, 410, 484, 481, 176, 0, 0, 0, 0];
-=======
 var stats;
 
-var treePeakHeights = [479, 489, 322, 539, 443, 480, 162, 410, 484, 481, 176];
->>>>>>> 3deb6db9ca21c081bb2ecc442f53eb4d2b91f022
+var treePeakHeights = [479, 489, 322, 539, 443, 480, 162, 410, 484, 481, 176, 0, 0, 0, 0];
 
 
 function preload() {
