@@ -1,7 +1,7 @@
 function SingleStat(text, pos, cumulative) {
 	this.text = text;
 	this.pos = pos;
-	this.val = cumulative ? 0 : -1;
+	this.val = cumulative ? 0 : 0;
 	this.cumulative = cumulative;
 }
 
@@ -27,12 +27,6 @@ SingleStat.prototype.createSprite = function() {
 	this.updateSprite();
 
 	return;
-	var bmd = game.make.bitmapData(200, 50);
-	this.bmd = bmd;
-	this.bmd.ctx.fillStyle = 'black';
-	this.bmd.ctx.font = '16px Revalia';
-	this.updateSprite();
-	//this.sprite = game.add.sprite(this.pos.x, this.pos.y, bmd);
 }
 
 SingleStat.prototype.updateSprite = function() {
@@ -47,7 +41,8 @@ function Stats() {
 	this.stats = {};
 	this.defineStat('treeCount', "Number of trees", new Phaser.Point(10, 10), true);
 	this.defineStat('maxSpeed', "Max speed", new Phaser.Point(10, 50), false);
-	this.defineStat('maxHeight', "Max height", new Phaser.Point(10, 100), false);
+	this.defineStat('maxHeight', "Max height", new Phaser.Point(200, 10), false);
+	this.defineStat('maxAirDistance', 'Furthest flight', new Phaser.Point(200, 50), false);
 }
 
 Stats.prototype.defineStat = function(name, text, pos, cumulative) {

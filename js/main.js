@@ -42,7 +42,8 @@ var terrainFrames = {
 
 var terrainVariations = 4;
 
-var treeVariations = 19;
+// we've got more variations than this, but some of them are bushes, which is throwing off kinematic play
+var treeVariations = 14;
 
 var maxPlayerDistance = 0;
 // 1 in n chance for a bush
@@ -65,6 +66,8 @@ var vineballGroup;
 var playerGroup;
 
 var stats;
+
+var landedDist;
 
 var treePeakHeights = [479, 489, 322, 539, 443, 480, 162, 410, 484, 481, 176];
 
@@ -149,7 +152,7 @@ function create() {
 
 	game.world.setBounds(-seaWidth, game.height - worldHeight, islandWidth + 2 * seaWidth, worldHeight);
 
-	player = playerGroup.create(0, 0, 'player');
+	player = playerGroup.create(0, seaLevel - 200, 'player');
 	player.anchor.setTo(0.5, 0.5);
 	player.scale.x = -1;
 	player.animations.add('spin', [0,1,2,3,4,5,6,7], 10, true);
@@ -258,6 +261,7 @@ function update() {
 		if (!anchor) {
 			player.animations.stop();
 		}
+		landedDist = player.body.position.x;
 	} else {
 		player.body.drag.x = 0;
 	}
@@ -307,6 +311,8 @@ function update() {
 
 	stats.update('maxSpeed', Math.round(player.body.velocity.getMagnitude()));
 	stats.update('maxHeight', Math.round(game.height - player.body.position.y));
+
+	stats.update('maxAirDistance', Math.round(Math.abs(player.body.position.x - landedDist)));
 }
 
 function spawnBush(x) {
