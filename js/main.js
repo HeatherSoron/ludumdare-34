@@ -242,6 +242,8 @@ function throwSeed() {
 	game.physics.arcade.enable(seed);
 	seed.body.gravity.y = gravity;
 
+	seed.anchor.setTo(0.5, 0.5);
+
 	seed.body.velocity = new Phaser.Point(game.input.activePointer.worldX, game.input.activePointer.worldY).subtract(player.body.position.x, player.body.position.y)
 		.setMagnitude(throwStrength).add(player.body.velocity.x, player.body.velocity.y);
 	seeds.push(seed);
@@ -250,15 +252,16 @@ function throwSeed() {
 function update() {
 	// iterate backwards because we'll be removing elements
 	for (var i = seeds.length - 1; i >= 0; --i) {
+		var seed = seeds[i];
 		if (game.physics.arcade.overlap(seeds[i], islandGroup)) {
-			var seed = seeds[i];
 			makeTree(seed.body.position.x - treeWidth / 2, heightAt(seed.body.position.x) - treeHeight);
 			seed.destroy();
 			seeds.splice(i, 1);
 		} else if (seeds[i].position.y > game.height) {
-			var seed = seeds[i];
 			seed.destroy();
 			seeds.splice(i, 1);
+		} else {
+			seed.angle += 90;	
 		}
 	}
 
