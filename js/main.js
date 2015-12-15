@@ -23,7 +23,8 @@ var seaWidth = seaTiles * tileSize;
 
 var seaLevel = game.height - (game.height / 4);
 
-var worldHeight = 1200;
+// WAY higher than I expect anyone to reach. But, we'll give them a challenge!
+var worldHeight = 4800;
 
 var lines = [];
 
