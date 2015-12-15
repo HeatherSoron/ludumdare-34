@@ -21,6 +21,9 @@ When you reach the far end of the island, a few stats will be shown. Have fun sw
 ## Stats
 
 NUMBER OF TREES: How many trees you've planted
+
 MAX SPEED: Maximum player velocity, in pixels per second (lag-adjusted)
+
 MAX HEIGHT: How high you've reached relative to the bottom of the ocean, in pixels
+
 FURTHEST FLIGHT: The maximum distance you've traveled without colliding with the ground, in pixels
