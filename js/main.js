@@ -15,6 +15,10 @@ var stepSize = tileSize / 4;
 
 var seaTiles = 10;
 
+// how many tiles away from the eastern sea counts as a "win"
+var winMargin = tileSize * 20;
+var statsShown = false;
+
 var terrainIterations = 6;
 var islandTiles;
 
@@ -190,7 +194,6 @@ function create() {
 	addSea();
 
 	stats = new Stats();
-	stats.show();
 }
 
 function makeTree(x, y) {
@@ -298,6 +301,10 @@ function update() {
 			}
 		}
 		maxPlayerDistance = player.x;
+		if (!statsShown && maxPlayerDistance > islandWidth - winMargin) {
+			stats.show();
+			statsShown = true;
+		}
 	}
 
 	if (player.body.velocity.x < -1) {
