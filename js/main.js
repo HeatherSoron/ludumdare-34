@@ -110,10 +110,19 @@ function addSky() {
 	myBitmap.context.fillStyle=grd;
 	myBitmap.context.fillRect(0, 0, game.width, game.height);
 
-	myBitmap.context.fillStyle=grd;
-	myBitmap.context.fillRect(0,580,800,20);
-
 	game.add.sprite(0, 0, myBitmap).fixedToCamera = true;
+}
+
+function addSea() {
+	var myBitmap = game.add.bitmapData(islandWidth + 2 * seaWidth, game.height - (seaLevel + 10));
+
+	var grd=myBitmap.context.createLinearGradient(0, 0, 0, game.height - (seaLevel + 10));
+	grd.addColorStop(0, "rgba(0, 80, 200, 0.5)");
+	grd.addColorStop(1, "rgba(0, 0, 50, 0.8)");
+	myBitmap.context.fillStyle=grd;
+	myBitmap.context.fillRect(0, 0, islandWidth + 2 * seaWidth, game.height - (seaLevel + 10));
+
+	game.add.sprite(-seaWidth, seaLevel + 10, myBitmap);
 }
 
 function create() {
@@ -176,6 +185,8 @@ function create() {
 	music.play();
 
 	seedSound = game.add.audio('seed');
+
+	addSea();
 
 	stats = new Stats();
 	stats.show();
