@@ -73,6 +73,8 @@ var stats;
 var landedDist;
 
 var treePeakHeights = [479, 489, 322, 539, 443, 480, 162, 410, 484, 481, 176, 0, 0, 0, 0];
+// we don't want two zero-height trees in a row
+var lastTreeHeight = 0;
 
 
 function preload() {
@@ -197,14 +199,19 @@ function create() {
 }
 
 function makeTree(x, y) {
-	var variation = Math.floor(Math.random() * treeVariations) + 1;
+	do {
+		var variation = Math.floor(Math.random() * treeVariations) + 1;
+		var peakHeight = treePeakHeights[variation - 1];
+	} while (lastTreeHeight == 0 && peakHeight == 0);
 	var tree = treeGroup.create(x, y, 'tree' + variation);
 	tree.animations.add('grow', [0, 1, 2, 3, 4, 5, 6, 7], 4, false);
 	tree.animations.play('grow');
+	var canopy = tree.height - peakHeight;
 	var center = tree.x + tree.width / 2;
-	var canopy = tree.height - treePeakHeights[variation - 1];
 	tree.trunk = new Phaser.Line(center, tree.y + canopy, center, tree.y + tree.height); /////////////
 	trees.push(tree);
+
+	lastTreeHeight = peakHeight;
 
 	stats.update('treeCount', 1);
 
