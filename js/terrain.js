@@ -145,6 +145,13 @@ function makeTerrain() {
 			}
 		}
 	}
+
+	// hacky way to preven the player from going under the island OR getting stuck on the lip, but it'll do
+	for (var y = seaLevel; y < game.height; y += stepSize) {
+		var x = (y - seaLevel) / stepSize
+		islandGroup.create(-x, y, 'collider').body.immovable = true;
+		islandGroup.create(islandWidth + x, y, 'collider').body.immovable = true;
+	}
 }
 
 function heightAt(x) {
