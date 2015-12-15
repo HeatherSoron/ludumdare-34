@@ -121,7 +121,9 @@ function addSea() {
 	var myBitmap = game.add.bitmapData(islandWidth + 2 * seaWidth, game.height - (seaLevel + 10));
 
 	var grd=myBitmap.context.createLinearGradient(0, 0, 0, game.height - (seaLevel + 10));
-	grd.addColorStop(0, "rgba(0, 80, 200, 0.5)");
+	grd.addColorStop(0, "rgba(255, 255, 255, 0)");
+	grd.addColorStop(0.02, "rgba(255, 255, 255, 1)");
+	grd.addColorStop(0.1, "rgba(0, 80, 200, 0.5)");
 	grd.addColorStop(1, "rgba(0, 0, 50, 0.8)");
 	myBitmap.context.fillStyle=grd;
 	myBitmap.context.fillRect(0, 0, islandWidth + 2 * seaWidth, game.height - (seaLevel + 10));
